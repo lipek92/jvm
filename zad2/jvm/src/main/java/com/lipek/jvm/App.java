@@ -18,7 +18,7 @@ public class App
 			System.out.println("2. " + s2.message());
 			System.out.println("====================================");
 
-			Thread.sleep(5000);
+			Thread.sleep(3000);
 		}
 		
 
