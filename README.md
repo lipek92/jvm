@@ -7,3 +7,13 @@ Uruchamianie
 mvn exec:java
 ```
 
+### Zad 2
+Własny ClassLoader, który dynamiczne ładuje klasy pobierane z serwera RESTowego napisanego w Node.js
+
+Serwer podmienia pliki .class podczas każdego zapytania o klasę 
+
+Uruchamianie serwera
+```
+npm install
+node server.js
+```
