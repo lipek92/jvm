@@ -17,3 +17,4 @@ Uruchamianie serwera
 npm install
 node server.js
 ```
+Uruchomienie projektu z poziomu IDE (klasa App.java)
