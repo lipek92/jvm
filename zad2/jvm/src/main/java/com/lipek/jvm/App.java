@@ -15,7 +15,7 @@ public class App
 			s2 = MyFactory.newInstance();
 			System.out.println("0. " + s0.message());
 			System.out.println("1. " + s1.message());
-			System.out.println("2. " + s2.message());
+			System.out.println("2. " + s2.message() + " (dynamic)");
 			System.out.println("====================================");
 
 			Thread.sleep(3000);

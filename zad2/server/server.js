@@ -13,9 +13,9 @@ app.get('/', function (req, res) {
 });
 
 function changeFilenames(){
-	fs.copySync(path.resolve(__dirname,'./resources/classes/MyImpl.class'), (__dirname,'./resources/classes/MyImpl.copy'));
-	fs.copySync(path.resolve(__dirname,'./resources/classes/MyImpl2.class'), (__dirname,'./resources/classes/MyImpl.class'));
-	fs.copySync(path.resolve(__dirname,'./resources/classes/MyImpl.copy'), (__dirname,'./resources/classes/MyImpl2.class'));
+	fs.copySync(path.resolve(__dirname,'./resources/classes/MyImpl.class'), path.resolve(__dirname,'./resources/classes/MyImpl.copy'));
+	fs.copySync(path.resolve(__dirname,'./resources/classes/MyImpl2.class'), path.resolve(__dirname,'./resources/classes/MyImpl.class'));
+	fs.copySync(path.resolve(__dirname,'./resources/classes/MyImpl.copy'), path.resolve(__dirname,'./resources/classes/MyImpl2.class'));
 }
 
 app.listen(3000, function () {
