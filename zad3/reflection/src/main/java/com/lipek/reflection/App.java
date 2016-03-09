@@ -5,16 +5,19 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class App 
 {
-	private static final long NUMBER_OF_TESTS = 102;
-	private static final long NUMBER_OF_INVOKES = 100000;
+	private static final long NUMBER_OF_TESTS = 32;
+	private static final long NUMBER_OF_INVOKES = 10000;
+	private final static int WARMUP_SIZE = 10000000;
+	static List<String> warmUpList = new ArrayList<String>(WARMUP_SIZE);
 	private static simpleObject simpleObject = new simpleObject();
 	private static int tempInt;
 	private static String tempString;
-	private static int sampleInt = 12345;
-	private static String sampleString = "xxxxx";
+	private static int sampleInt = 123456;
+	private static String sampleString = "qwertyuiop";
 	private static Field tempField;
 	private static Method tempMethod;
 	private static long startTime;
@@ -31,6 +34,12 @@ public class App
 	private static ArrayList<Long> reflectionReferenceReadTestResults = new ArrayList<>();
 	private static ArrayList<Long> reflectionReferenceWriteTestResults = new ArrayList<>();
 	private static ArrayList<Long> reflectionInvokeMethodResults = new ArrayList<>();
+	
+	static {
+	    for (int i = 0; i < WARMUP_SIZE; i++) {
+	        warmUpList.add(Integer.toString(i));
+	    }
+	}
 
     public static void main( String[] args )
     {
@@ -185,7 +194,7 @@ public class App
 		startTime = System.nanoTime();
 		for (int i = 0; i < NUMBER_OF_INVOKES; i++)
 		{
-			simpleObject.setSimpleInt(123);
+			simpleObject.setSimpleInt(sampleInt);
 		}
 		endTime = System.nanoTime();
 		invokeMethodResults.add(endTime - startTime);
@@ -212,7 +221,7 @@ public class App
 		{
 			try {
 				tempField = objectClass.getDeclaredField("simpleInt");
-				tempField.set(objectInstance, 123);
+				tempField.set(objectInstance, sampleInt);
 			} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
 				e.printStackTrace();
 			}
@@ -242,7 +251,7 @@ public class App
 		{
 			try {
 				tempField = objectClass.getDeclaredField("simpleString");
-				tempField.set(objectInstance, "123");
+				tempField.set(objectInstance, sampleString);
 			} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
 				e.printStackTrace();
 			}
@@ -257,7 +266,7 @@ public class App
 		{
 			try {
 				tempMethod = objectClass.getDeclaredMethod("setSimpleInt", int.class);
-				tempMethod.invoke(objectInstance, 123);
+				tempMethod.invoke(objectInstance, sampleInt);
 			} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 				e.printStackTrace();
 			}			
