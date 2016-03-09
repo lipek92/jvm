@@ -9,9 +9,15 @@ import java.util.List;
 
 public class App 
 {
-	private static final long NUMBER_OF_TESTS = 32;
+	private static final long NUMBER_OF_TESTS = 10;
 	private static final long NUMBER_OF_INVOKES = 10000;
-	private final static int WARMUP_SIZE = 10000000;
+	private static final int WARMUP_SIZE = 100000;
+	private static final String CLASS_NAME = "com.lipek.reflection.simpleObject";
+	private static final String INT_FIELD = "simpleInt";
+	private static final String STRING_FIELD = "simpleString";
+	private static final String METHOD_NAME = "setSimpleInt";
+	
+	
 	static List<String> warmUpList = new ArrayList<String>(WARMUP_SIZE);
 	private static simpleObject simpleObject = new simpleObject();
 	private static int tempInt;
@@ -47,7 +53,7 @@ public class App
     	Object objectInstance;
     	
 		try {
-			objectClass = Class.forName("com.lipek.reflection.simpleObject");
+			objectClass = Class.forName(CLASS_NAME);
 			objectInstance = objectClass.newInstance();
 			
 	    	for	(int i = 0; i < NUMBER_OF_TESTS; i++){
@@ -205,7 +211,7 @@ public class App
 		for (int i = 0; i < NUMBER_OF_INVOKES; i++)
 		{
 			try {
-				tempField = objectClass.getDeclaredField("simpleInt");
+				tempField = objectClass.getDeclaredField(INT_FIELD);
 				tempInt = (int) tempField.get(objectInstance);
 			} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
 				e.printStackTrace();
@@ -220,7 +226,7 @@ public class App
 		for (int i = 0; i < NUMBER_OF_INVOKES; i++)
 		{
 			try {
-				tempField = objectClass.getDeclaredField("simpleInt");
+				tempField = objectClass.getDeclaredField(INT_FIELD);
 				tempField.set(objectInstance, sampleInt);
 			} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
 				e.printStackTrace();
@@ -235,7 +241,7 @@ public class App
 		for (int i = 0; i < NUMBER_OF_INVOKES; i++)
 		{
 			try {
-				tempField = objectClass.getDeclaredField("simpleString");
+				tempField = objectClass.getDeclaredField(STRING_FIELD);
 				tempString = (String) tempField.get(objectInstance);
 			} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
 				e.printStackTrace();
@@ -250,7 +256,7 @@ public class App
 		for (int i = 0; i < NUMBER_OF_INVOKES; i++)
 		{
 			try {
-				tempField = objectClass.getDeclaredField("simpleString");
+				tempField = objectClass.getDeclaredField(STRING_FIELD);
 				tempField.set(objectInstance, sampleString);
 			} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
 				e.printStackTrace();
@@ -265,7 +271,7 @@ public class App
 		for (int i = 0; i < NUMBER_OF_INVOKES; i++)
 		{
 			try {
-				tempMethod = objectClass.getDeclaredMethod("setSimpleInt", int.class);
+				tempMethod = objectClass.getDeclaredMethod(METHOD_NAME, int.class);
 				tempMethod.invoke(objectInstance, sampleInt);
 			} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 				e.printStackTrace();
