@@ -4,16 +4,21 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class App 
 {
-	private static final long NUMBER_OF_TESTS = 10;
-	private static final long NUMBER_OF_INVOKES = 10000;
+	private static final long NUMBER_OF_TESTS = 102;
+	private static final long NUMBER_OF_INVOKES = 100000;
 	private static simpleObject simpleObject = new simpleObject();
 	private static int tempInt;
 	private static String tempString;
+	private static int sampleInt = 12345;
+	private static String sampleString = "xxxxx";
 	private static Field tempField;
 	private static Method tempMethod;
+	private static long startTime;
+	private static long endTime;
 	
 	private static ArrayList<Long> simpleReadTestResults = new ArrayList<>();
 	private static ArrayList<Long> simpleWriteTestResults = new ArrayList<>();
@@ -55,77 +60,139 @@ public class App
 			e.printStackTrace();
 		}
 		
-
-		average(invokeMethodResults);
-        average(reflectionInvokeMethodResults);
+        deleteOutsiders();
+        	
+        printList(simpleReadTestResults, reflectionSimpleReadTestResults, "Typ prosty, odczyt");
+        printList(simpleWriteTestResults, reflectionSimpleWriteTestResults, "Typ prosty, zapis");
+        printList(referenceReadTestResults, reflectionReferenceReadTestResults, "Typ referencyjny, odczyt");
+        printList(referenceWriteTestResults, reflectionReferenceWriteTestResults, "Typ referencyjny, zapis");
+        printList(invokeMethodResults, reflectionInvokeMethodResults, "Metoda, zapis");
+        
+        printList(simpleReadTestResults, simpleWriteTestResults, referenceReadTestResults, referenceWriteTestResults, invokeMethodResults, "Bezpośrednio");
+        printList(reflectionSimpleReadTestResults, reflectionSimpleWriteTestResults, reflectionReferenceReadTestResults, reflectionReferenceWriteTestResults, reflectionInvokeMethodResults, "Przez Refleksje");
 		
-    	
+        System.out.println("\n");
+        
+		System.out.println("WYWOŁANIA BEZPOŚREDNIE\nŚredni czas testu ODCZYTU dla typu PROSTEGO: " + average(simpleReadTestResults) + " ns");
+		System.out.println("Średni czas testu ZAPISU dla typu PROSTEGO: " + average(simpleWriteTestResults) + " ns");
+		System.out.println("Średni czas testu ODCZYTU dla typu REFERENCYJNEGO: " + average(referenceReadTestResults) + " ns");
+		System.out.println("Średni czas testu ZAPISU dla typu REFERENCYJNEGO: " + average(referenceWriteTestResults) + " ns");
+		System.out.println("Średni czas testu WYWOŁANIA METODY: " + average(invokeMethodResults) + " ns");
+		
+		System.out.println("WYWOŁANIA PRZEZ REFLEKSJE\nŚredni czas testu ODCZYTU dla typu PROSTEGO: " + average(reflectionSimpleReadTestResults) + " ns");
+		System.out.println("Średni czas testu ZAPISU dla typu PROSTEGO: " + average(reflectionSimpleWriteTestResults) + " ns");
+		System.out.println("Średni czas testu ODCZYTU dla typu REFERENCYJNEGO: " + average(reflectionReferenceReadTestResults) + " ns");
+		System.out.println("Średni czas testu ZAPISU dla typu REFERENCYJNEGO: " + average(reflectionReferenceWriteTestResults) + " ns");
+		System.out.println("Średni czas testu WYWOŁANIA METODY: " + average(reflectionInvokeMethodResults) + " ns");
     }
     
-    private static void average(ArrayList<Long> list)
+	private static void deleteOutsiders()
+	{
+		simpleReadTestResults.remove(simpleReadTestResults.indexOf(Collections.max(simpleReadTestResults)));
+		simpleWriteTestResults.remove(simpleWriteTestResults.indexOf(Collections.max(simpleWriteTestResults)));
+		referenceReadTestResults.remove(referenceReadTestResults.indexOf(Collections.max(referenceReadTestResults)));
+		referenceWriteTestResults.remove(referenceWriteTestResults.indexOf(Collections.max(referenceWriteTestResults)));
+		invokeMethodResults.remove(invokeMethodResults.indexOf(Collections.max(invokeMethodResults)));
+		reflectionSimpleReadTestResults.remove(reflectionSimpleReadTestResults.indexOf(Collections.max(reflectionSimpleReadTestResults)));
+		reflectionSimpleWriteTestResults.remove(reflectionSimpleWriteTestResults.indexOf(Collections.max(reflectionSimpleWriteTestResults)));
+		reflectionReferenceReadTestResults.remove(reflectionReferenceReadTestResults.indexOf(Collections.max(reflectionReferenceReadTestResults)));
+		reflectionReferenceWriteTestResults.remove(reflectionReferenceWriteTestResults.indexOf(Collections.max(reflectionReferenceWriteTestResults)));
+		reflectionInvokeMethodResults.remove(reflectionInvokeMethodResults.indexOf(Collections.max(reflectionInvokeMethodResults)));
+		
+		simpleReadTestResults.remove(simpleReadTestResults.indexOf(Collections.min(simpleReadTestResults)));
+		simpleWriteTestResults.remove(simpleWriteTestResults.indexOf(Collections.min(simpleWriteTestResults)));
+		referenceReadTestResults.remove(referenceReadTestResults.indexOf(Collections.min(referenceReadTestResults)));
+		referenceWriteTestResults.remove(referenceWriteTestResults.indexOf(Collections.min(referenceWriteTestResults)));
+		invokeMethodResults.remove(invokeMethodResults.indexOf(Collections.min(invokeMethodResults)));
+		reflectionSimpleReadTestResults.remove(reflectionSimpleReadTestResults.indexOf(Collections.min(reflectionSimpleReadTestResults)));
+		reflectionSimpleWriteTestResults.remove(reflectionSimpleWriteTestResults.indexOf(Collections.min(reflectionSimpleWriteTestResults)));
+		reflectionReferenceReadTestResults.remove(reflectionReferenceReadTestResults.indexOf(Collections.min(reflectionReferenceReadTestResults)));
+		reflectionReferenceWriteTestResults.remove(reflectionReferenceWriteTestResults.indexOf(Collections.min(reflectionReferenceWriteTestResults)));
+		reflectionInvokeMethodResults.remove(reflectionInvokeMethodResults.indexOf(Collections.min(reflectionInvokeMethodResults)));	
+	}
+    
+    private static long average(ArrayList<Long> list)
     {
 		long sum = 0;
         
         for(int i=0; i < list.size() ; i++)
                 sum = sum + list.get(i);
        
-        double average = sum / list.size();
+        long average = sum / list.size();
        
-        System.out.println("Average value of array elements is : " + average);
+        return average;
+    }
+    
+    private static void printList(ArrayList<Long> firstList, ArrayList<Long> secondList, String name)
+    {
+		System.out.println(name);
+		System.out.println("NumerTestu, Normalnie , Refleksja");
+        
+        for(int i=0; i < firstList.size(); i++)
+            System.out.println(i+1 + "," + firstList.get(i) + "," + secondList.get(i));
+    }
+    
+    private static void printList(ArrayList<Long> firstList, ArrayList<Long> secondList, ArrayList<Long> thirdList, ArrayList<Long> fourthList, ArrayList<Long> fifthList, String name)
+    {
+		System.out.println(name);
+		System.out.println("NumerTestu, ProstyOdczyt, ProstyZapis, ReferencjaOdczyt, ReferencjaZapis, MetodaZapis");
+        
+        for(int i=0; i < firstList.size(); i++)
+            System.out.println(i+1 + "," + firstList.get(i) + "," + secondList.get(i) + "," + thirdList.get(i) + "," + fourthList.get(i) + "," + fifthList.get(i));
     }
     
 	private static void simpleReadTest() {
-		long startTime = System.nanoTime();
+		startTime = System.nanoTime();
 		for (int i = 0; i < NUMBER_OF_INVOKES; i++)
 		{
 			tempInt = simpleObject.simpleInt;
 		}
-		long resultTime = System.nanoTime() - startTime;
-		simpleReadTestResults.add(resultTime);
+		endTime = System.nanoTime();
+		simpleReadTestResults.add(endTime - startTime);
 	}
 
 	private static void simpleWriteTest() {
-		long startTime = System.nanoTime();
+		startTime = System.nanoTime();
 		for (int i = 0; i < NUMBER_OF_INVOKES; i++)
 		{
-			simpleObject.simpleInt = 123;
+			simpleObject.simpleInt = sampleInt;
 		}
-		long resultTime = System.nanoTime() - startTime;
-		simpleWriteTestResults.add(resultTime);
+		endTime = System.nanoTime();
+		simpleWriteTestResults.add(endTime - startTime);
 	}
 
 	private static void referenceReadTest() {
-		long startTime = System.nanoTime();
+		startTime = System.nanoTime();
 		for (int i = 0; i < NUMBER_OF_INVOKES; i++)
 		{
 			tempString = simpleObject.simpleString;
 		}
-		long resultTime = System.nanoTime() - startTime;
-		referenceReadTestResults.add(resultTime);	
+		endTime = System.nanoTime();
+		referenceReadTestResults.add(endTime - startTime);	
 	}
 
 	private static void referenceWriteTest() {
-		long startTime = System.nanoTime();
+		startTime = System.nanoTime();
 		for (int i = 0; i < NUMBER_OF_INVOKES; i++)
 		{
-			simpleObject.simpleString = "123";
+			simpleObject.simpleString = sampleString;
 		}
-		long resultTime = System.nanoTime() - startTime;
-		referenceWriteTestResults.add(resultTime);
+		endTime = System.nanoTime();
+		referenceWriteTestResults.add(endTime - startTime);
 	}
 
 	private static void invokeMethod() {
-		long startTime = System.nanoTime();
+		startTime = System.nanoTime();
 		for (int i = 0; i < NUMBER_OF_INVOKES; i++)
 		{
 			simpleObject.setSimpleInt(123);
 		}
-		long resultTime = System.nanoTime() - startTime;
-		invokeMethodResults.add(resultTime);
+		endTime = System.nanoTime();
+		invokeMethodResults.add(endTime - startTime);
 	}
 
 	private static void reflectionSimpleReadTest(Class objectClass, Object objectInstance) {
-		long startTime = System.nanoTime();
+		startTime = System.nanoTime();
 		for (int i = 0; i < NUMBER_OF_INVOKES; i++)
 		{
 			try {
@@ -135,12 +202,12 @@ public class App
 				e.printStackTrace();
 			}
 		}
-		long resultTime = System.nanoTime() - startTime;
-		reflectionSimpleReadTestResults.add(resultTime);
+		endTime = System.nanoTime();
+		reflectionSimpleReadTestResults.add(endTime - startTime);
 	}
 
 	private static void reflectionSimpleWriteTest(Class objectClass, Object objectInstance) {
-		long startTime = System.nanoTime();
+		startTime = System.nanoTime();
 		for (int i = 0; i < NUMBER_OF_INVOKES; i++)
 		{
 			try {
@@ -150,12 +217,12 @@ public class App
 				e.printStackTrace();
 			}
 		}
-		long resultTime = System.nanoTime() - startTime;
-		reflectionSimpleWriteTestResults.add(resultTime);
+		endTime = System.nanoTime();
+		reflectionSimpleWriteTestResults.add(endTime - startTime);
 	}
 
 	private static void reflectionReferenceReadTest(Class objectClass, Object objectInstance) {
-		long startTime = System.nanoTime();
+		startTime = System.nanoTime();
 		for (int i = 0; i < NUMBER_OF_INVOKES; i++)
 		{
 			try {
@@ -165,12 +232,12 @@ public class App
 				e.printStackTrace();
 			}
 		}
-		long resultTime = System.nanoTime() - startTime;
-		reflectionReferenceReadTestResults.add(resultTime);
+		endTime = System.nanoTime();
+		reflectionReferenceReadTestResults.add(endTime - startTime);
 	}
 
 	private static void reflectionReferenceWriteTest(Class objectClass, Object objectInstance) {
-		long startTime = System.nanoTime();
+		startTime = System.nanoTime();
 		for (int i = 0; i < NUMBER_OF_INVOKES; i++)
 		{
 			try {
@@ -180,12 +247,12 @@ public class App
 				e.printStackTrace();
 			}
 		}
-		long resultTime = System.nanoTime() - startTime;
-		reflectionReferenceWriteTestResults.add(resultTime);
+		endTime = System.nanoTime();
+		reflectionReferenceWriteTestResults.add(endTime - startTime);
 	}
 
 	private static void reflectionInvokeMethod(Class objectClass, Object objectInstance) {
-		long startTime = System.nanoTime();
+		startTime = System.nanoTime();
 		for (int i = 0; i < NUMBER_OF_INVOKES; i++)
 		{
 			try {
@@ -195,7 +262,7 @@ public class App
 				e.printStackTrace();
 			}			
 		}
-		long resultTime = System.nanoTime() - startTime;
-		reflectionInvokeMethodResults.add(resultTime);
+		endTime = System.nanoTime();
+		reflectionInvokeMethodResults.add(endTime - startTime);
 	}
 }
