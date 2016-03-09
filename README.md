@@ -18,3 +18,12 @@ npm install
 node server.js
 ```
 Uruchomienie projektu z poziomu IDE (klasa App.java)
+
+
+### Zad 3
+Dokładny opis w pliku raport.pdf
+
+Uruchamianie
+```
+mvn exec:java
+```
