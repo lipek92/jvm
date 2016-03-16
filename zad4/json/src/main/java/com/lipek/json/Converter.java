@@ -42,23 +42,27 @@ public class Converter {
 
 	private String parseArray(Field field, Object obj) throws IllegalArgumentException, IllegalAccessException {
 		String parseResult = "\""+field.getName()+"\":";
-		parseResult += "[";
 		
 		Class cType = field.getType().getComponentType();
 	    Object array = field.get(obj);
 	    
-	    for(int i = 0; i<Array.getLength(array); i++){
-			if (cType.equals(String.class)){
-				parseResult += "\""+Array.get(array, i)+"\",";
-			} else {
-				parseResult += Array.get(array, i)+",";
+	    if (array != null){
+			parseResult += "[";
+		    for(int i = 0; i<Array.getLength(array); i++){
+				if (cType.equals(String.class)){
+					parseResult += "\""+Array.get(array, i)+"\",";
+				} else {
+					parseResult += Array.get(array, i)+",";
+			    }
 		    }
+		    if (Array.getLength(array) != 0){
+			    parseResult = parseResult.substring(0, parseResult.length()-1);
+		    }
+			parseResult += "]";
+	    } else {
+	    	parseResult += null;
 	    }
-		
-	    if (Array.getLength(array) != 0){
-		    parseResult = parseResult.substring(0, parseResult.length()-1);
-	    }
-		parseResult += "]";
+
 		return parseResult;
 	}
 }

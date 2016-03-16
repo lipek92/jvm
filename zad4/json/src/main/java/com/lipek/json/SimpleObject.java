@@ -13,7 +13,7 @@ public class SimpleObject {
 	private int[] arrayIntPriv = {1234, 3214};
 	private String[] arrayStringPriv = {"ola4", "ala4"};
 	
-	public int[] emptyIntArray = {};
+	public int[] nullIntArray;
 	public String[] emptyStringArray = {};
 	
 	public int getPrivateInt() {
