@@ -17,36 +17,30 @@ public class Converter {
 		Field[] fields = o.getClass().getDeclaredFields();
 		
 		StringBuilder jsonResult = new StringBuilder("{");
-		
-		for (Field field : fields){	
-			field.setAccessible(true);
-			type = field.getType();
-
-			if (type.equals(Collection.class)){
-				continue;
-			} else if (type.isArray()){
-				jsonResult.append(parseArray(field, o)).append(",");
-			} else if (type.equals(String.class)){
-				try {
-					if (field.get(o) == null){
+		try {
+			for (Field field : fields){	
+				field.setAccessible(true);
+				type = field.getType();
+	
+				if (type.isArray()){
+					jsonResult.append(parseArray(field, o)).append(",");
+				} else if (type.equals(String.class)){
+	
+						if (field.get(o) == null){
+							jsonResult.append("\"").append(field.getName()).append("\":").append(field.get(o)).append(",");
+						} else {
+							jsonResult.append("\"").append(field.getName()).append("\":\"").append(field.get(o)).append("\",");
+						}
+	
+				} else {
 						jsonResult.append("\"").append(field.getName()).append("\":").append(field.get(o)).append(",");
-					} else {
-						jsonResult.append("\"").append(field.getName()).append("\":\"").append(field.get(o)).append("\",");
-					}
-				} catch (IllegalArgumentException | IllegalAccessException e) {
-					e.printStackTrace();
 				}
-			} else {
-				try {
-					jsonResult.append("\"").append(field.getName()).append("\":").append(field.get(o)).append(",");
-				} catch (IllegalArgumentException | IllegalAccessException e) {
-					e.printStackTrace();
-				}
+	
 			}
-
+		} catch (IllegalArgumentException | IllegalAccessException e) {
+			e.printStackTrace();
 		}
-		jsonResult.delete(jsonResult.length()-1, jsonResult.length());
-		jsonResult.append("}");
+		jsonResult.replace(jsonResult.length()-1, jsonResult.length(), "}");
 		
 		return jsonResult.toString();
 	}

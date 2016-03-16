@@ -27,3 +27,13 @@ Uruchamianie
 ```
 mvn exec:java
 ```
+
+### Zad 4
+Prosty konwerter POJO to JSON
+
+![alt tag](https://github.com/lipek92/jvm/tree/master/zad4/json.png)
+
+Uruchamianie
+```
+mvn exec:java
+```

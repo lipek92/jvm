@@ -6,7 +6,7 @@ import java.util.Collections;
 public class App 
 {
 	private static final long NUMBER_OF_TESTS = 10;
-	private static final long NUMBER_OF_INVOKES = 10000;
+	private static final long NUMBER_OF_INVOKES = 100000;
 	private static ArrayList<Long> jacksonResults = new ArrayList<>();
 	private static ArrayList<Long> myConverterResults = new ArrayList<>();
 	private static long startTime;
@@ -20,7 +20,7 @@ public class App
     {
     	simpleObject.publicInt = 10;
     	simpleObject.publicBool = true;
-    	simpleObject.publicString = "xaxa";
+    	simpleObject.publicString = "xaxa";    	
     	
     	for	(int i = 0; i < NUMBER_OF_TESTS; i++){
     		jacksonTest();
@@ -33,8 +33,12 @@ public class App
     	System.out.println("jackson:     "+jacksonString);
     	System.out.println("myConverter: "+myConverterString);
     	System.out.println("\n===== ŚREDNIE CZASY =====");
-    	System.out.println("jackson:     "+average(jacksonResults));
-    	System.out.println("myConverter: "+average(myConverterResults));
+    	
+    	long avgJackson = average(jacksonResults);
+    	long avgMyConverter = average(myConverterResults);
+    	System.out.println("jackson:      "+avgJackson);
+    	System.out.println("myConverter:  "+avgMyConverter);
+    	System.out.println("Współczynnik: "+ (avgMyConverter*100/avgJackson) +"%");
     }
     
 	private static void deleteOutsiders()
