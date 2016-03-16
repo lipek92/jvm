@@ -12,12 +12,11 @@ public class Converter {
 	ObjectMapper mapper = new ObjectMapper();
 
 	public String toJson (Object o){
-		String jsonResult = null;
 		Class<?> type = null;
 		
 		Field[] fields = o.getClass().getDeclaredFields();
 		
-		jsonResult = "{";
+		StringBuilder jsonResult = new StringBuilder("{");
 		
 		for (Field field : fields){	
 			field.setAccessible(true);
@@ -26,35 +25,34 @@ public class Converter {
 			if (type.equals(Collection.class)){
 				continue;
 			} else if (type.isArray()){
-				jsonResult += parseArray(field, o) + ",";
+				jsonResult.append(parseArray(field, o)).append(",");
 			} else if (type.equals(String.class)){
 				try {
 					if (field.get(o) == null){
-						jsonResult += "\""+field.getName()+"\":"+field.get(o)+",";
+						jsonResult.append("\"").append(field.getName()).append("\":").append(field.get(o)).append(",");
 					} else {
-						jsonResult += "\""+field.getName()+"\":\""+field.get(o)+"\",";
+						jsonResult.append("\"").append(field.getName()).append("\":\"").append(field.get(o)).append("\",");
 					}
 				} catch (IllegalArgumentException | IllegalAccessException e) {
 					e.printStackTrace();
 				}
 			} else {
 				try {
-					jsonResult += "\""+field.getName()+"\":"+field.get(o)+",";
+					jsonResult.append("\"").append(field.getName()).append("\":").append(field.get(o)).append(",");
 				} catch (IllegalArgumentException | IllegalAccessException e) {
 					e.printStackTrace();
 				}
 			}
 
 		}
+		jsonResult.delete(jsonResult.length()-1, jsonResult.length());
+		jsonResult.append("}");
 		
-		jsonResult = jsonResult.substring(0, jsonResult.length()-1);
-		jsonResult += "}";
-		
-		return jsonResult;
+		return jsonResult.toString();
 	}
 
 	private String parseArray(Field field, Object o) {
-		String parseResult = "\""+field.getName()+"\":";
+		StringBuilder parseResult = new StringBuilder("\"").append(field.getName()).append("\":");
 		
 		Class cType = field.getType().getComponentType();
 	    Object array = null;
@@ -65,23 +63,23 @@ public class Converter {
 		}
 	    
 	    if (array != null){
-			parseResult += "[";
+			parseResult.append("[");
 		    for(int i = 0; i<Array.getLength(array); i++){
 				if (cType.equals(String.class)){
-					parseResult += "\""+Array.get(array, i)+"\",";
+					parseResult.append("\"").append(Array.get(array, i)).append("\",");
 				} else {
-					parseResult += Array.get(array, i)+",";
+					parseResult.append(Array.get(array, i)).append(",");
 			    }
 		    }
 		    if (Array.getLength(array) != 0){
-			    parseResult = parseResult.substring(0, parseResult.length()-1);
+		    	parseResult.delete(parseResult.length()-1, parseResult.length());
 		    }
-			parseResult += "]";
+			parseResult.append("]");
 	    } else {
-	    	parseResult += null;
+	    	parseResult.append(array);
 	    }
 
-		return parseResult;
+		return parseResult.toString();
 	}
 	
 	public String toJackson (Object o){
