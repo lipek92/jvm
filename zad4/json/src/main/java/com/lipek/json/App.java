@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class App 
 {
-    public static void main( String[] args )
+    public static void main( String[] args ) throws IllegalArgumentException, IllegalAccessException
     {
     	String jacksonString = null;
     	String myJsonString = null;
@@ -15,6 +15,8 @@ public class App
     	
     	SimpleObject simpleObject = new SimpleObject();
     	simpleObject.publicInt = 10;
+    	simpleObject.publicBool = true;
+    	simpleObject.publicString = "xaxa";
     	
     	try {
     		jacksonString = mapper.writeValueAsString(simpleObject);
