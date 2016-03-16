@@ -16,6 +16,10 @@ public class SimpleObject {
 	public int[] nullIntArray;
 	public String[] emptyStringArray = {};
 	
+	public SimpleObject(){
+		
+	}
+	
 	public int getPrivateInt() {
 		return privateInt;
 	}

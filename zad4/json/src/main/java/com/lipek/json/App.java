@@ -1,35 +1,78 @@
 package com.lipek.json;
 
 import java.util.ArrayList;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Collections;
 
 public class App 
 {
-    public static void main( String[] args ) throws IllegalArgumentException, IllegalAccessException
+	private static final long NUMBER_OF_TESTS = 10;
+	private static final long NUMBER_OF_INVOKES = 10000;
+	private static ArrayList<Long> jacksonResults = new ArrayList<>();
+	private static ArrayList<Long> myConverterResults = new ArrayList<>();
+	private static long startTime;
+	private static long endTime;
+	private static String jacksonString = null;
+	private static String myConverterString = null;
+	private static Converter converter = new Converter();
+	private static SimpleObject simpleObject = new SimpleObject();
+	
+    public static void main( String[] args )
     {
-    	String jacksonString = null;
-    	String myJsonString = null;
-    	
-    	ObjectMapper mapper = new ObjectMapper();
-    	Converter converter = new Converter();
-    	
-    	SimpleObject simpleObject = new SimpleObject();
     	simpleObject.publicInt = 10;
     	simpleObject.publicBool = true;
     	simpleObject.publicString = "xaxa";
     	
-    	try {
-    		jacksonString = mapper.writeValueAsString(simpleObject);
-		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+    	for	(int i = 0; i < NUMBER_OF_TESTS; i++){
+    		jacksonTest();
+        	myConverterTest();	
+    	}
     	
-    	myJsonString = converter.toJson(simpleObject);
+    	deleteOutsiders();
+
     	
-    	System.out.println(jacksonString);
-    	System.out.println(myJsonString);
+    	System.out.println("jackson:     "+jacksonString);
+    	System.out.println("myConverter: "+myConverterString);
+    	System.out.println("\n===== ŚREDNIE CZASY =====");
+    	System.out.println("jackson:     "+average(jacksonResults));
+    	System.out.println("myConverter: "+average(myConverterResults));
     }
+    
+	private static void deleteOutsiders()
+	{
+		jacksonResults.remove(jacksonResults.indexOf(Collections.max(jacksonResults)));	
+		jacksonResults.remove(jacksonResults.indexOf(Collections.min(jacksonResults)));
+		myConverterResults.remove(myConverterResults.indexOf(Collections.max(myConverterResults)));	
+		myConverterResults.remove(myConverterResults.indexOf(Collections.min(myConverterResults)));	
+	}
+
+    private static long average(ArrayList<Long> list)
+    {
+		long sum = 0;
+        
+        for(int i=0; i < list.size() ; i++)
+                sum = sum + list.get(i);
+       
+        long average = sum / list.size();
+       
+        return average;
+    }
+	
+	private static void jacksonTest() {
+		startTime = System.nanoTime();
+		for (int i = 0; i < NUMBER_OF_INVOKES; i++)
+		{
+			jacksonString = converter.toJackson(simpleObject);
+		}
+		endTime = System.nanoTime();
+		jacksonResults.add(endTime - startTime);	
+	}
+	private static void myConverterTest() {
+		startTime = System.nanoTime();
+		for (int i = 0; i < NUMBER_OF_INVOKES; i++)
+		{
+			myConverterString = converter.toJson(simpleObject);
+		}
+		endTime = System.nanoTime();
+		myConverterResults.add(endTime - startTime);	
+	}
 }

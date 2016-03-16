@@ -4,9 +4,14 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.Collection;
 
-public class Converter {
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-	public String toJson (Object o) throws IllegalArgumentException, IllegalAccessException{
+public class Converter {
+	
+	ObjectMapper mapper = new ObjectMapper();
+
+	public String toJson (Object o){
 		String jsonResult = null;
 		Class<?> type = null;
 		
@@ -23,13 +28,21 @@ public class Converter {
 			} else if (type.isArray()){
 				jsonResult += parseArray(field, o) + ",";
 			} else if (type.equals(String.class)){
-				if (field.get(o) == null){
-					jsonResult += "\""+field.getName()+"\":"+field.get(o)+",";
-				} else {
-					jsonResult += "\""+field.getName()+"\":\""+field.get(o)+"\",";
+				try {
+					if (field.get(o) == null){
+						jsonResult += "\""+field.getName()+"\":"+field.get(o)+",";
+					} else {
+						jsonResult += "\""+field.getName()+"\":\""+field.get(o)+"\",";
+					}
+				} catch (IllegalArgumentException | IllegalAccessException e) {
+					e.printStackTrace();
 				}
 			} else {
-				jsonResult += "\""+field.getName()+"\":"+field.get(o)+",";
+				try {
+					jsonResult += "\""+field.getName()+"\":"+field.get(o)+",";
+				} catch (IllegalArgumentException | IllegalAccessException e) {
+					e.printStackTrace();
+				}
 			}
 
 		}
@@ -40,11 +53,16 @@ public class Converter {
 		return jsonResult;
 	}
 
-	private String parseArray(Field field, Object obj) throws IllegalArgumentException, IllegalAccessException {
+	private String parseArray(Field field, Object o) {
 		String parseResult = "\""+field.getName()+"\":";
 		
 		Class cType = field.getType().getComponentType();
-	    Object array = field.get(obj);
+	    Object array = null;
+		try {
+			array = field.get(o);
+		} catch (IllegalArgumentException | IllegalAccessException e) {
+			e.printStackTrace();
+		}
 	    
 	    if (array != null){
 			parseResult += "[";
@@ -64,5 +82,14 @@ public class Converter {
 	    }
 
 		return parseResult;
+	}
+	
+	public String toJackson (Object o){
+		try {
+			return mapper.writeValueAsString(o);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }
