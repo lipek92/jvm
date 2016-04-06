@@ -29,14 +29,32 @@ mvn exec:java
 ```
 
 ### Zad 4
-Prosty konwerter POJO to JSON
+Prosty konwerter POJO to JSON.
+- obsługuje pola publiczne i prywatne
+- obsługuje tablice
+- nie obsługuje kolekcji, zagnieżdzeń obiektów
 
-![alt tag](https://github.com/lipek92/jvm/tree/master/zad4/json.png)
+####Dane maszyny, na której był przeprowadzony test:
+```
+CPU: Intel® CoreTM i7-2630QM CPU @ 2.00GHz × 8
+Dysk: SSD GOODRAM C40
+OS: Ubuntu 14.04.4 LTS
+Java version: 1.8.0_74
+VM version: 64-Bit Server VM (build 25.74-b02, mixed mode)
+```
+####Przebieg testu:
+Program iterował dziesięciokrotnie w pętli. W każdej iteracji zostały wywołane dwie metody 100 000 razy. Pierwsza z nich dokonywała parsowania obiektu na JSON przy pomocy biblioteki Jackson, a druga przy pomocy konwertera napisanego przeze mnie. Skrajne wyniki zostały odrzucone, a pozostałe uśrednione. Rezultat poniżej. 
+
+Wykres przedstawia porównanie średniego czasu (w sekundach) parsowania obiektu do JSONa poprzez bibliotekę Jakson i konwerter stworzony przeze mnie, wypadający nieco gorzej.  
+![alt tag](https://github.com/lipek92/jvm/blob/master/zad4/json.png)
+
+Aplikacja została uruchomiona w środowski Eclipse.
 
 Uruchamianie
 ```
 mvn exec:java
 ```
+<<<<<<< HEAD
 
 ### Zad 6
 
@@ -71,3 +89,5 @@ Uruchamianie
 ```
 mvn exec:java
 ```
+=======
+>>>>>>> 056d25dbbc68f90064907ce141b6325feaf3b8f0
