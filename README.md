@@ -54,7 +54,6 @@ Uruchamianie
 ```
 mvn exec:java
 ```
-<<<<<<< HEAD
 
 ### Zad 6
 
@@ -90,4 +89,3 @@ Uruchamianie
 mvn exec:java
 ```
 =======
->>>>>>> 056d25dbbc68f90064907ce141b6325feaf3b8f0
