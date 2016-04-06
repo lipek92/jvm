@@ -29,6 +29,8 @@ public class App
 				e.printStackTrace();
 			}
     	}
+    	executorServiceUnSafe.shutdown();
+    	executorServiceSafe.shutdown();
     	
     	System.out.println("UNSAFE\n");
     	printResult(unSafeResults);
