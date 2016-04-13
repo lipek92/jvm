@@ -88,4 +88,24 @@ Uruchamianie
 ```
 mvn exec:java
 ```
+
+### Zad 7
+
+Aplikacja RESTful postawiona na Jersey'u.
+
+Po uruchomieniu wg. poniższej instrukcji wchodzimy na 
+http://localhost:8080/myapp/time/xxx 
+lub
+http://localhost:8080/myapp/time2/xxx 
+gdzie xxx jest parametrem określającym ilość mikrosekund na jaką testowo usypiamy wątek (w drugim przypadku wartość zostanie pomnożona *2). Na stronie powinna się pojawić odpowiedź postaci: ReqTime: xxx.
+
+Agent przekazuje do logów parametr z jakim została wykonana metoda oraz czas jej wykonania.
+
+Uruchamianie
+```
+mvn compile
+mvn assembly:assembly
+mvn exec:exec
+```
+
 =======
