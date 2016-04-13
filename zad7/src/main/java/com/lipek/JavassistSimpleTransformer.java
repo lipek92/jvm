@@ -16,7 +16,7 @@ public class JavassistSimpleTransformer implements ClassFileTransformer {
 
 		byte[] result = bytes;
 
-		if (className.contains("MyClass")) {
+		if (className.contains("MyClass") || className.contains("MyClass2")) {
 			try {
 				String dotClassName = className.replace('/', '.');
 
