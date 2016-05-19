@@ -4,3 +4,4 @@
 .settings/
 jackson.json
 serialized.object
+gson.json
