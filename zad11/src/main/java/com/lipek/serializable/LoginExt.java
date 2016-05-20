@@ -1,13 +1,16 @@
 package com.lipek.serializable;
 
-import java.io.Serializable;
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.util.Random;
 
-public class Login implements Serializable{
+public class LoginExt implements Externalizable{
 	
 	private static final long serialVersionUID = 1L;
 
-	public Login(){
+	public LoginExt(){
 		this.username = this.randomString();
 		this.password = this.randomString();
 	}
@@ -45,6 +48,16 @@ public class Login implements Serializable{
 		}
 		String output = sb.toString();
 		return output;
+	}
+	@Override
+	public void writeExternal(ObjectOutput out) throws IOException {
+		out.writeObject(username);
+		out.writeObject(password);
+	}
+	@Override
+	public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+		username = (String) in.readObject();
+		password = (String) in.readObject();		
 	}
 	
 	
