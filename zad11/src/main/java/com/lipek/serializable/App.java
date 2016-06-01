@@ -7,7 +7,7 @@ import java.util.List;
 public class App 
 {
 	private static int numberOfTests = 10;
-	private static int numberOfLogins = 10000;
+	private static int[] numberOfLogins = {1,1000,10000};
 	
 	public static List<Login> logins = new ArrayList<Login>();
 	public static List<LoginExt> loginsExt = new ArrayList<LoginExt>();
@@ -15,19 +15,24 @@ public class App
 	
     public static void main( String[] args )
     {
-    	for (int i=0; i<numberOfLogins; i++){
-            Login login = new Login();
-            LoginExt loginExt = new LoginExt(login.getUsername(), login.getPassword());
-            logins.add(login);
-            loginsExt.add(loginExt);
-    	}
-    	
-    	serializatos.add(new Serializer());
-    	serializatos.add(new Jackson());
-    	serializatos.add(new GsonConverter());
+    	for (int i = 0; i < numberOfLogins.length; i++) {
+    		serializatos.clear();
+        	for (int j = 0; j < numberOfLogins[i]; j++){
+                Login login = new Login();
+                LoginExt loginExt = new LoginExt(login.getUsername(), login.getPassword());
+                logins.add(login);
+                loginsExt.add(loginExt);
+        	}
+        	
+        	System.out.println("NUMBER OF OBJECTS: " + numberOfLogins[i]);
+        	serializatos.add(new Serializer());
+        	serializatos.add(new Jackson());
+        	serializatos.add(new GsonConverter());
 
-        testSerialization();
-        testExternalizer();
+            testSerialization();
+            testExternalizer();
+		}
+
         
     }
     
