@@ -109,4 +109,55 @@ mvn assembly:assembly
 mvn exec:exec
 ```
 
+### Zad 11
+Test wydajnościowy porównujący różne metody serializacji i deserializacji obiektów
+
+####Dane maszyny, na której był przeprowadzony test:
+```
+CPU: Intel® CoreTM i7-2630QM CPU @ 2.00GHz × 8
+Dysk: SSD GOODRAM C40
+OS: Ubuntu 14.04.4 LTS
+Java version: 1.8.0_74
+VM version: 64-Bit Server VM (build 25.74-b02, mixed mode)
+```
+####Przebieg testu:
+Program iterował dziesięciokrotnie w pętli. W każdej iteracji program dokonywał serializacji i deserializacji listy obiektów typu Login przy pomocy 5 różnych metod. Test został przeprowadzony kolejno dla 1, 1000 i 10 000 obiektów. 
+
+```
+NUMBER OF OBJECTS: 1
+class com.lipek.serializable.Serializer procesing time: 16
+class com.lipek.serializable.Jackson procesing time: 264
+class com.lipek.serializable.GsonConverter procesing time: 54
+class com.lipek.serializable.JAXB procesing time: 263
+class com.lipek.serializable.Externalizer procesing time: 5
+NUMBER OF OBJECTS: 1000
+class com.lipek.serializable.Serializer procesing time: 174
+class com.lipek.serializable.Jackson procesing time: 66
+class com.lipek.serializable.GsonConverter procesing time: 96
+class com.lipek.serializable.JAXB procesing time: 373
+class com.lipek.serializable.Externalizer procesing time: 290
+NUMBER OF OBJECTS: 10000
+class com.lipek.serializable.Serializer procesing time: 1134
+class com.lipek.serializable.Jackson procesing time: 116
+class com.lipek.serializable.GsonConverter procesing time: 400
+class com.lipek.serializable.JAXB procesing time: 584
+class com.lipek.serializable.Externalizer procesing time: 1576
+```
+
+Wykres przedstawia porównanie średniego czasu serializacji i deserializacji różnymi metodami w zależności od liczby obiektów 
+![alt tag](https://github.com/lipek92/jvm/blob/master/zad11/wykres.png)
+
+####Wnioski:
+Serializable i Externalizable bardzo dobrze radzą sobie w przypadku małej ilości danych, jednak przy większej czas gwałtownie rośnie. 
+W przypadku JAXB czas serializacji dla 1 obiektu jest duży, ale przy zwiększaniu ich liczby rośnie powoli.
+Dla Gsona wynik dla 1 obiektu jest nieco gorszy niż dla Serializable i Externalizable, ale z wzrostem liczby obiektów zyskuje przewagę.
+Ciekawy wynik jest w przypadku Jacksona, gdzie średni czas serializacji dla 1000 obiektów jest znacznie niższy niż dla 1.
+
+Jak widać wybór najlepszego serializatora zależy od ilości danych do przetworzenia.
+
+Uruchamianie
+```
+mvn exec:java
+```
+
 =======
