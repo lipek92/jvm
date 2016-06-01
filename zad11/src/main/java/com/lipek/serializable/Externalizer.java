@@ -8,12 +8,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.List;
 
-public class Externalizer extends BaseSerial {
+public class Externalizer {
 
 	static String FILE_NAME = "externalized.object";
 	
-	@Override
-	public void serialize(List<Login> logins) {
+	public void serialize(List<LoginExt> logins) {
 		FileOutputStream fileOut = null;
 		try {
 			fileOut = new FileOutputStream(FILE_NAME);
@@ -33,9 +32,8 @@ public class Externalizer extends BaseSerial {
 		
 	}
 
-	@Override
-	public List<Login> deserialize() {
-		List<Login> logins = null;
+	public List<LoginExt> deserialize() {
+		List<LoginExt> logins = null;
 		FileInputStream fileIn = null;
 		try {
 			fileIn = new FileInputStream(FILE_NAME);
@@ -45,7 +43,7 @@ public class Externalizer extends BaseSerial {
 		ObjectInputStream in;
 		try {
 			in = new ObjectInputStream(fileIn);
-			logins = (List<Login>) in.readObject();  
+			logins = (List<LoginExt>) in.readObject();  
 			in.close();  
 			fileIn.close();
 		} catch (IOException | ClassNotFoundException e) {
@@ -53,6 +51,20 @@ public class Externalizer extends BaseSerial {
 		}
 		
 		return logins;
+	}
+	
+	public long testSerialization(List<LoginExt> logins) {
+		long t1 = System.currentTimeMillis();
+		serialize(logins);
+		long processingTime = System.currentTimeMillis() - t1;
+		return processingTime;
+	}
+	
+	public long testDeserialization(List<LoginExt> logins) {
+		long t1 = System.currentTimeMillis();
+		deserialize();
+		long processingTime = System.currentTimeMillis() - t1;
+		return processingTime;
 	}
 
 }

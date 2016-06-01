@@ -15,6 +15,11 @@ public class LoginExt implements Externalizable{
 		this.password = this.randomString();
 	}
 	
+	public LoginExt(String username, String password) {
+		this.username = username;
+		this.password = password;
+	}
+
 	private String username;
 	private String password;
 	
