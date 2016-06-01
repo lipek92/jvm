@@ -28,6 +28,7 @@ public class App
         	serializatos.add(new Serializer());
         	serializatos.add(new Jackson());
         	serializatos.add(new GsonConverter());
+        	serializatos.add(new JAXB());
 
             testSerialization();
             testExternalizer();
