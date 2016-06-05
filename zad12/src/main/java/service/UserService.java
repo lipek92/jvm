@@ -6,6 +6,8 @@ import entities.User;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 
 public class UserService implements UserServiceInterface {
@@ -17,7 +19,11 @@ public class UserService implements UserServiceInterface {
     }
 
     public List<User> findUsersWithAddressesCountMoreThan(int numberOfAddresses) {
-        return null;
+        List<User> result = users.stream()
+        		.filter(user -> user.getPersonDetails().getAddresses().size() > numberOfAddresses)
+        		.collect(Collectors.toList());
+    	
+    	return result;
     }
 
     public Person findOldestPerson() {
