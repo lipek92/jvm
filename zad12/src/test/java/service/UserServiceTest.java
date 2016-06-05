@@ -29,7 +29,7 @@ public class UserServiceTest {
 		Person u1PersonDetails = new Person();
 		u1PersonDetails.setAge(25);
 		u1PersonDetails.setName("u1name");
-		u1PersonDetails.setSurname("u1surname");
+		u1PersonDetails.setSurname("u1surnamex");
 		
 		Role u1Role = new Role();
 
@@ -95,7 +95,7 @@ public class UserServiceTest {
 		assertEquals(userService.findUserWithLongestUsername(), u2);
 		
 		// #4
-		assertEquals(userService.getNamesAndSurnamesCommaSeparatedOfAllUsersAbove18(), "u1name u1surname, u2name u2surname");
+		assertEquals(userService.getNamesAndSurnamesCommaSeparatedOfAllUsersAbove18(), "u1name u1surnamex, u2name u2surname");
 		
 		// #5
 		List<String> test5 = new ArrayList<String>();
@@ -106,6 +106,9 @@ public class UserServiceTest {
 		
 		// #6
 		assertEquals(userService.getUsersAverageAge(), 22.5, 0);
+		
+		// #7
+		userService.printCapitalizedPermissionNamesOfUsersWithSurnameStartingWith("e");
 		
 	}
 }

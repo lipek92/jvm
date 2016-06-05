@@ -1,5 +1,6 @@
 package service;
 
+import entities.Permission;
 import entities.Person;
 import entities.Role;
 import entities.User;
@@ -68,7 +69,12 @@ public class UserService implements UserServiceInterface {
     }
 
     public void printCapitalizedPermissionNamesOfUsersWithSurnameStartingWith(String suffix) {
-
+    	users.stream()
+    	.filter(user -> user.getPersonDetails().getSurname().endsWith(suffix))
+    	.map(user -> user.getPersonDetails().getRole().getPermissions())
+    	.flatMap(permission -> permission.stream())
+    	.map(permission -> permission.getName().toUpperCase())
+    	.forEach(System.out::println);
     }
 
     public Map<Role, List<User>> groupUsersByRole() {
