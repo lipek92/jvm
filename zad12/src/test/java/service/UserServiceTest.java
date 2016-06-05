@@ -3,7 +3,9 @@ package service;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Test;
 
@@ -15,6 +17,7 @@ import entities.User;
 
 public class UserServiceTest {
 	
+	@SuppressWarnings("null")
 	@Test
 	public void test(){
 		List<User> users = new ArrayList<User>();
@@ -31,35 +34,32 @@ public class UserServiceTest {
 		u1PersonDetails.setName("u1name");
 		u1PersonDetails.setSurname("u1surnamex");
 		
-		Role u1Role = new Role();
+		Role userRole = new Role();
 
-		List<Permission> u1Permissions = new ArrayList<Permission>();
-		Permission u1Permission1 = new Permission();
-		u1Permission1.setName("write comment");
-		Permission u1Permission2 = new Permission();
-		u1Permission2.setName("read comment");
+		List<Permission> userPermissions = new ArrayList<Permission>();
+		Permission writeComment = new Permission();
+		writeComment.setName("write comment");
+		Permission readComment = new Permission();
+		readComment.setName("read comment");
 		
-		u1Permissions.add(u1Permission1);
-		u1Permissions.add(u1Permission2);
+		userPermissions.add(writeComment);
+		userPermissions.add(readComment);
 		
-		u1Role.setPermissions(u1Permissions);
-		u1PersonDetails.setRole(u1Role);
+		userRole.setPermissions(userPermissions);
+		u1PersonDetails.setRole(userRole);
 		
 		Person u2PersonDetails = new Person();
 		u2PersonDetails.setAge(20);
 		u2PersonDetails.setName("u2name");
 		u2PersonDetails.setSurname("u2surname");
 		
-		Role u2Role = new Role();
+		Role guestRole = new Role();
 
-		List<Permission> u2Permissions = new ArrayList<Permission>();
-		Permission u2Permission1 = new Permission();
-		u2Permission1.setName("read comment");
+		List<Permission> guestPermissions = new ArrayList<Permission>();
+		guestPermissions.add(readComment);
 		
-		u2Permissions.add(u2Permission1);
-		
-		u2Role.setPermissions(u2Permissions);
-		u2PersonDetails.setRole(u2Role);
+		guestRole.setPermissions(guestPermissions);
+		u2PersonDetails.setRole(guestRole);
 		
 		Address u1Address1 = new Address();
 		Address u1Address2 = new Address();
@@ -109,6 +109,18 @@ public class UserServiceTest {
 		
 		// #7
 		userService.printCapitalizedPermissionNamesOfUsersWithSurnameStartingWith("e");
+		
+		// #8
+		Map<Role, List<User>> test8 = new HashMap<Role, List<User>>();
+		List<User> guestUsers = new ArrayList<User>();
+		List<User> registeredUsers = new ArrayList<User>();
+		registeredUsers.add(u1);
+		guestUsers.add(u2);
+		
+		test8.put(userRole, registeredUsers);
+		test8.put(guestRole, guestUsers);
+		
+		assertEquals(userService.groupUsersByRole(), test8);
 		
 	}
 }

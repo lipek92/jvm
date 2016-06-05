@@ -78,7 +78,9 @@ public class UserService implements UserServiceInterface {
     }
 
     public Map<Role, List<User>> groupUsersByRole() {
-        return null;
+    	Map<Role, List<User>> result = users.stream()
+    			.collect(Collectors.groupingBy(user -> user.getPersonDetails().getRole()));
+        return result;
     }
 
     public Map<Boolean, List<User>> partitionUserByUnderAndOver18() {
