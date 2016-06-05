@@ -60,7 +60,11 @@ public class UserService implements UserServiceInterface {
     }
 
     public double getUsersAverageAge() {
-        return 0;
+        double result = users.stream()
+        		.mapToDouble(user -> user.getPersonDetails().getAge())
+        		.average()
+        		.getAsDouble();
+    	return result;
     }
 
     public void printCapitalizedPermissionNamesOfUsersWithSurnameStartingWith(String suffix) {

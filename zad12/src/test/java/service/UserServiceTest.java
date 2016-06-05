@@ -104,5 +104,8 @@ public class UserServiceTest {
 		test5.add(2, "write comment");
 		assertEquals(userService.getSortedPermissionsOfUsersWithNameStartingWith("u"), test5);
 		
+		// #6
+		assertEquals(userService.getUsersAverageAge(), 22.5, 0);
+		
 	}
 }
