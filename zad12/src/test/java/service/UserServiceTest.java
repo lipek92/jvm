@@ -17,7 +17,6 @@ import entities.User;
 
 public class UserServiceTest {
 	
-	@SuppressWarnings("null")
 	@Test
 	public void test(){
 		List<User> users = new ArrayList<User>();
@@ -121,6 +120,18 @@ public class UserServiceTest {
 		test8.put(guestRole, guestUsers);
 		
 		assertEquals(userService.groupUsersByRole(), test8);
+		
+		// #9
+		Map<Boolean, List<User>> test9 = new HashMap<Boolean, List<User>>();
+		List<User> under18 = new ArrayList<User>();
+		List<User> over18 = new ArrayList<User>();
+		over18.add(u1);
+		over18.add(u2);
+		
+		test9.put(true, over18);
+		test9.put(false, under18);
+		
+		assertEquals(userService.partitionUserByUnderAndOver18(), test9);
 		
 	}
 }

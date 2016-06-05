@@ -84,6 +84,8 @@ public class UserService implements UserServiceInterface {
     }
 
     public Map<Boolean, List<User>> partitionUserByUnderAndOver18() {
-        return null;
+    	Map<Boolean, List<User>> result = users.stream()
+    			.collect(Collectors.partitioningBy(user -> user.getPersonDetails().getAge() >= 18));
+    	return result;
     }
 }
