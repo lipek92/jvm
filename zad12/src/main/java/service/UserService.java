@@ -41,7 +41,11 @@ public class UserService implements UserServiceInterface {
     }
 
     public String getNamesAndSurnamesCommaSeparatedOfAllUsersAbove18() {
-        return null;
+        String result = users.stream()
+        		.filter(user -> user.getPersonDetails().getAge() > 18)
+        		.map(user -> user.getPersonDetails().getName() + " " + user.getPersonDetails().getSurname())
+        		.collect(Collectors.joining(", "));
+    	return result;
     }
 
     public List<String> getSortedPermissionsOfUsersWithNameStartingWith(String prefix) {
