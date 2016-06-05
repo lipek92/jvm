@@ -34,7 +34,10 @@ public class UserService implements UserServiceInterface {
     }
 
     public User findUserWithLongestUsername() {
-        return null;
+    	User result = users.stream()
+    			.max((u1,u2) -> Integer.compare(u1.getName().length(), u2.getName().length()))
+    			.get();
+    	return result;
     }
 
     public String getNamesAndSurnamesCommaSeparatedOfAllUsersAbove18() {

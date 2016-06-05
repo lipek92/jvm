@@ -18,9 +18,11 @@ public class UserServiceTest {
 		List<User> users = new ArrayList<User>();
 		
 		User u1 = new User();
-		User u2 = new User();
 		u1.setName("user1");
 		u1.setPassword("passworduser1");
+		
+		User u2 = new User();
+		u2.setName("uuuser2");
 		
 		Person u1PersonDeatils = new Person();
 		u1PersonDeatils.setAge(25);
@@ -56,6 +58,9 @@ public class UserServiceTest {
 		
 		// #2
 		assertEquals(userService.findOldestPerson(), u1PersonDeatils);
+		
+		// #3
+		assertEquals(userService.findUserWithLongestUsername(), u2);
 		
 	}
 }
