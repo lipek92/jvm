@@ -6,7 +6,6 @@ import entities.User;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 
@@ -27,7 +26,11 @@ public class UserService implements UserServiceInterface {
     }
 
     public Person findOldestPerson() {
-        return null;
+        Person result = users.stream()
+        		.map(user -> user.getPersonDetails())
+        		.max((p1,p2) -> Integer.compare(p1.getAge(), p2.getAge()))
+        		.get();
+    	return result;
     }
 
     public User findUserWithLongestUsername() {

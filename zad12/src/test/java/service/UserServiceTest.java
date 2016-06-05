@@ -23,7 +23,9 @@ public class UserServiceTest {
 		u1.setPassword("passworduser1");
 		
 		Person u1PersonDeatils = new Person();
+		u1PersonDeatils.setAge(25);
 		Person u2PersonDetails = new Person();
+		u2PersonDetails.setAge(20);
 		
 		Address u1Address1 = new Address();
 		Address u1Address2 = new Address();
@@ -51,6 +53,9 @@ public class UserServiceTest {
 		// #1
 		List<User> usersWithAddressesCountMoreThan = userService.findUsersWithAddressesCountMoreThan(1);
 		assertEquals(usersWithAddressesCountMoreThan.size(), 1);
+		
+		// #2
+		assertEquals(userService.findOldestPerson(), u1PersonDeatils);
 		
 	}
 }
