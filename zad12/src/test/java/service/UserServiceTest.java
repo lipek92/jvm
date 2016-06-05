@@ -8,7 +8,9 @@ import java.util.List;
 import org.junit.Test;
 
 import entities.Address;
+import entities.Permission;
 import entities.Person;
+import entities.Role;
 import entities.User;
 
 public class UserServiceTest {
@@ -28,10 +30,36 @@ public class UserServiceTest {
 		u1PersonDetails.setAge(25);
 		u1PersonDetails.setName("u1name");
 		u1PersonDetails.setSurname("u1surname");
+		
+		Role u1Role = new Role();
+
+		List<Permission> u1Permissions = new ArrayList<Permission>();
+		Permission u1Permission1 = new Permission();
+		u1Permission1.setName("write comment");
+		Permission u1Permission2 = new Permission();
+		u1Permission2.setName("read comment");
+		
+		u1Permissions.add(u1Permission1);
+		u1Permissions.add(u1Permission2);
+		
+		u1Role.setPermissions(u1Permissions);
+		u1PersonDetails.setRole(u1Role);
+		
 		Person u2PersonDetails = new Person();
 		u2PersonDetails.setAge(20);
 		u2PersonDetails.setName("u2name");
 		u2PersonDetails.setSurname("u2surname");
+		
+		Role u2Role = new Role();
+
+		List<Permission> u2Permissions = new ArrayList<Permission>();
+		Permission u2Permission1 = new Permission();
+		u2Permission1.setName("read comment");
+		
+		u2Permissions.add(u2Permission1);
+		
+		u2Role.setPermissions(u2Permissions);
+		u2PersonDetails.setRole(u2Role);
 		
 		Address u1Address1 = new Address();
 		Address u1Address2 = new Address();
@@ -68,6 +96,13 @@ public class UserServiceTest {
 		
 		// #4
 		assertEquals(userService.getNamesAndSurnamesCommaSeparatedOfAllUsersAbove18(), "u1name u1surname, u2name u2surname");
+		
+		// #5
+		List<String> test5 = new ArrayList<String>();
+		test5.add(0, "read comment");
+		test5.add(1, "read comment");
+		test5.add(2, "write comment");
+		assertEquals(userService.getSortedPermissionsOfUsersWithNameStartingWith("u"), test5);
 		
 	}
 }

@@ -49,7 +49,14 @@ public class UserService implements UserServiceInterface {
     }
 
     public List<String> getSortedPermissionsOfUsersWithNameStartingWith(String prefix) {
-        return null;
+    	List<String> result = users.stream()
+    			.filter(user -> user.getName().startsWith(prefix))
+    			.map(user -> user.getPersonDetails().getRole().getPermissions())
+    			.flatMap(permission -> permission.stream())
+    			.map(permission -> permission.getName())
+    			.sorted()
+    			.collect(Collectors.toList());
+        return result;
     }
 
     public double getUsersAverageAge() {
